@@ -1,0 +1,10 @@
+C:\Users\thalmaier\source\repos\KanjiKoohiApp\KanjiKoohiApp\bin\Debug\KanjiKoohiApp.exe.config
+C:\Users\thalmaier\source\repos\KanjiKoohiApp\KanjiKoohiApp\bin\Debug\KanjiKoohiApp.exe
+C:\Users\thalmaier\source\repos\KanjiKoohiApp\KanjiKoohiApp\bin\Debug\KanjiKoohiApp.pdb
+C:\Users\thalmaier\source\repos\KanjiKoohiApp\KanjiKoohiApp\obj\Debug\KanjiKoohiApp.csprojResolveAssemblyReference.cache
+C:\Users\thalmaier\source\repos\KanjiKoohiApp\KanjiKoohiApp\obj\Debug\KanjiKoohiApp.Form1.resources
+C:\Users\thalmaier\source\repos\KanjiKoohiApp\KanjiKoohiApp\obj\Debug\KanjiKoohiApp.Properties.Resources.resources
+C:\Users\thalmaier\source\repos\KanjiKoohiApp\KanjiKoohiApp\obj\Debug\KanjiKoohiApp.csproj.GenerateResource.Cache
+C:\Users\thalmaier\source\repos\KanjiKoohiApp\KanjiKoohiApp\obj\Debug\KanjiKoohiApp.csproj.CoreCompileInputs.cache
+C:\Users\thalmaier\source\repos\KanjiKoohiApp\KanjiKoohiApp\obj\Debug\KanjiKoohiApp.exe
+C:\Users\thalmaier\source\repos\KanjiKoohiApp\KanjiKoohiApp\obj\Debug\KanjiKoohiApp.pdb
