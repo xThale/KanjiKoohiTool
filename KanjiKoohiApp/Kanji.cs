@@ -8,14 +8,16 @@ namespace KanjiKoohiApp
 {
     class Kanji
     {
-        public String frameNumber = "";
+        public int frameNumber = -1;
         public String kanji = "";
         public String keyword = "";
-        public String box = "";
-        public String failCount = "";
-        public String passCount = "";
+        public int box = -1;
+        public int totalCount = -1;
+        public int failCount = -1;
+        public int passCount = -1;
+        public double passPercentage = -1;
 
-        public Kanji(String frameNumber, String kanji, String keyword, String box, String failCount, String passCount)
+        public Kanji(int frameNumber, String kanji, String keyword, int box, int failCount, int passCount)
         {
             this.frameNumber = frameNumber;
             this.kanji = kanji;
@@ -23,6 +25,9 @@ namespace KanjiKoohiApp
             this.box = box;
             this.failCount = failCount;
             this.passCount = passCount;
+
+            this.totalCount = failCount + passCount;
+            this.passPercentage = (double)((double)passCount / (double)totalCount) * 100;
         }
 
         public override string ToString()
