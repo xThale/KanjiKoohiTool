@@ -8,3 +8,16 @@ C:\Users\thalmaier\source\repos\KanjiKoohiApp\KanjiKoohiApp\obj\Debug\KanjiKoohi
 C:\Users\thalmaier\source\repos\KanjiKoohiApp\KanjiKoohiApp\obj\Debug\KanjiKoohiApp.csproj.CoreCompileInputs.cache
 C:\Users\thalmaier\source\repos\KanjiKoohiApp\KanjiKoohiApp\obj\Debug\KanjiKoohiApp.exe
 C:\Users\thalmaier\source\repos\KanjiKoohiApp\KanjiKoohiApp\obj\Debug\KanjiKoohiApp.pdb
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\bin\Debug\KanjiKoohiApp.exe.config
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\bin\Debug\KanjiKoohiApp.exe
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\bin\Debug\KanjiKoohiApp.pdb
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\obj\Debug\KanjiKoohiApp.csprojAssemblyReference.cache
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\obj\Debug\KanjiKoohiApp.Form1.resources
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\obj\Debug\KanjiKoohiApp.Properties.Resources.resources
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\obj\Debug\KanjiKoohiApp.csproj.GenerateResource.cache
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\obj\Debug\KanjiKoohiApp.csproj.CoreCompileInputs.cache
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\obj\Debug\KanjiKoohiApp.exe
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\obj\Debug\KanjiKoohiApp.pdb
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\bin\Debug\Newtonsoft.Json.dll
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\bin\Debug\Newtonsoft.Json.xml
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\obj\Debug\KanjiKoohiApp.csproj.CopyComplete

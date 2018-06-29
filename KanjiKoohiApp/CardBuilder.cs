@@ -8,9 +8,10 @@ namespace KanjiKoohiApp
 {
     class CardBuilder
     {
-        public Dictionary<String, List<Kanji>> getCards(KanjiListDatabase db, int newCount, int easyThreshold, int mediumThreshold)
+        public Dictionary<String, List<Kanji>> cardList = new Dictionary<String, List<Kanji>>();
+
+        public void getCards(KanjiListDatabase db, int newCount, int easyThreshold, int mediumThreshold)
         {
-            Dictionary<String,List<Kanji>> cardList = new Dictionary<String, List<Kanji>>();
 
             List<Kanji> easyList = new List<Kanji>();
             List<Kanji> mediumList = new List<Kanji>();
@@ -32,13 +33,11 @@ namespace KanjiKoohiApp
                     hardList.Add(kanji);
             }
 
-            cardList.Add("Easy Kanji",easyList);
-            cardList.Add("Medium Kanji", mediumList);
-            cardList.Add("Hard Kanji", hardList);
-            cardList.Add("New Easy Kanji", newEasyList);
-            cardList.Add("New Hard Kanji", newHardList);
-
-            return cardList;
+            this.cardList.Add("Easy Kanji",easyList);
+            this.cardList.Add("Medium Kanji", mediumList);
+            this.cardList.Add("Hard Kanji", hardList);
+            this.cardList.Add("New Easy Kanji", newEasyList);
+            this.cardList.Add("New Hard Kanji", newHardList);
         }
     }
 }

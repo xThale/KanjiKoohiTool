@@ -37,14 +37,14 @@ namespace KanjiKoohiApp
             dataGridView.DataSource = bindingSource;
             dataGridView.Update();
 
-            Dictionary<String, List<Kanji>> cardLists = cardBuilder.getCards(this.kanjiListDatabase,2,90,80);
+            cardBuilder.getCards(this.kanjiListDatabase,2,90,80);
             labelImport.Text = "Card-Count: " + this.kanjiListDatabase.getKanjiList().Count+"     ";
-            foreach (KeyValuePair<String, List<Kanji>> kvp in cardLists)
+            foreach (KeyValuePair<String, List<Kanji>> kvp in this.cardBuilder.cardList)
             {
                 labelImport.Text = labelImport.Text + kvp.Key + "-Count: " + kvp.Value.Count + "     ";
             }
 
-            //quizletRestApi.authApp();
+            this.BringToFront();
         }
 
         void dataGridView_MouseWheel(object sender, MouseEventArgs e)
@@ -62,6 +62,48 @@ namespace KanjiKoohiApp
                 this.dataGridView.FirstDisplayedScrollingRowIndex
                     = currentIndex + scrollLines;
             }
+        }
+
+        private async void buttonConnect_Click(object sender, EventArgs e)
+        {
+            buttonConnect.Enabled = false;
+            buttonConnect.Text = "Creating sets";
+
+            if(quizletRestApi.access_token == "")
+            {
+                if (quizletRestApi.getResponse("http://127.0.0.1:80/"))
+                {
+                    Boolean result = await quizletRestApi.requestTokenAsync();
+                    if (!result)
+                    {
+                        throw new Exception("Failed to get access token");
+                    }
+                }
+            }
+
+            
+
+            Dictionary<int, String> setMap = await quizletRestApi.getAllSets();
+
+            foreach (KeyValuePair<int, String> kvp in setMap)
+            {
+                foreach (KeyValuePair<String, List<Kanji>> kvpCardList in this.cardBuilder.cardList)
+                {
+                    if (kvp.Value.Equals(kvpCardList.Key))
+                    {
+                        await quizletRestApi.removeSet(kvp.Key);
+                    }
+                }
+            }
+
+            foreach (KeyValuePair<String, List<Kanji>> kvpCardList in this.cardBuilder.cardList)
+            {
+                if (kvpCardList.Value.Count > 0)
+                    await quizletRestApi.createSets(kvpCardList.Key, kvpCardList.Value);
+            }
+
+            buttonConnect.Enabled = true;
+            buttonConnect.Text = "Connect";
         }
     }
 }

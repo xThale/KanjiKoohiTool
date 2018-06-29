@@ -20,14 +20,17 @@ namespace KanjiKoohiApp
         public Kanji(int frameNumber, String kanji, String keyword, int box, int failCount, int passCount)
         {
             this.frameNumber = frameNumber;
-            this.kanji = kanji;
-            this.keyword = keyword;
+            this.kanji = kanji.Replace("\"", "");
+            this.keyword = keyword.Replace("\"", "");
             this.box = box;
             this.failCount = failCount;
             this.passCount = passCount;
 
             this.totalCount = failCount + passCount;
-            this.passPercentage = (double)((double)passCount / (double)totalCount) * 100;
+            if (totalCount != 0)
+                this.passPercentage = (double)((double)passCount / (double)totalCount) * 100;
+            else
+                this.passPercentage = 0;
         }
 
         public override string ToString()

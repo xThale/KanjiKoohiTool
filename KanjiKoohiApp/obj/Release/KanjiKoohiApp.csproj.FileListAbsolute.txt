@@ -1,0 +1,12 @@
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\bin\Release\KanjiKoohiApp.exe.config
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\bin\Release\KanjiKoohiApp.exe
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\bin\Release\KanjiKoohiApp.pdb
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\bin\Release\Newtonsoft.Json.dll
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\bin\Release\Newtonsoft.Json.xml
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\obj\Release\KanjiKoohiApp.Form1.resources
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\obj\Release\KanjiKoohiApp.Properties.Resources.resources
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\obj\Release\KanjiKoohiApp.csproj.GenerateResource.cache
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\obj\Release\KanjiKoohiApp.csproj.CoreCompileInputs.cache
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\obj\Release\KanjiKoohiApp.csproj.CopyComplete
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\obj\Release\KanjiKoohiApp.exe
+C:\Users\simon\Development\KanjiKoohii\KanjiKoohiApp\obj\Release\KanjiKoohiApp.pdb
