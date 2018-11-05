@@ -16,6 +16,7 @@ namespace KanjiKoohiApp
         public int failCount = -1;
         public int passCount = -1;
         public double passPercentage = -1;
+        public String story = "";
 
         public Kanji(int frameNumber, String kanji, String keyword, int box, int failCount, int passCount)
         {

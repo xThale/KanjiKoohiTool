@@ -7,18 +7,21 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace KanjiKoohiApp
 {
     class QuizletRestApi
     {
         private static Random random = new Random();
-        private static String clientId = "PedjCTSzS7";
+        public String clientId = "PedjCTSzS7";
         private String code = "";
         private String type = "";
         public String access_token = "";
         private String username = "";
+        public String randomString = "";
 
         public async Task<Dictionary<int, String>> getAllSets()
         {
@@ -39,62 +42,160 @@ namespace KanjiKoohiApp
         public async Task<JArray> getAsync(string uri)
         {
             var httpClient = new HttpClient();
-            var content = await httpClient.GetStringAsync(uri);
-            return await Task.Run(() => JArray.Parse(content));
+            httpClient.Timeout = TimeSpan.FromSeconds(2);
+            int retry = 0;
+            while(retry < 2)
+            {
+                try
+                {
+                    var content = await httpClient.GetStringAsync(uri);
+                    return await Task.Run(() => JArray.Parse(content));
+                }
+                catch (HttpRequestException ex)
+                {
+                    retry++;
+                    if (retry == 1)
+                        Thread.Sleep(1000);
+                    else
+                    {
+                        DialogResult dialogResult = MessageBox.Show("Exception while getting all sets for an user. Message: " + ex.Message + ". Try again?", "Exception while deleting sets", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            await getAsync(uri);
+                        }
+                        throw ex;
+                    }
+                }
+            }
+            return null;
         }
 
         public async Task<Boolean> delAsync(string uri)
         {
             var httpClient = new HttpClient();
+            httpClient.Timeout = TimeSpan.FromSeconds(2);
+
             var content = await httpClient.DeleteAsync(uri);
             var response = await content.Content.ReadAsStringAsync();
-            if (content.StatusCode == HttpStatusCode.NoContent)
+            if (content.StatusCode == HttpStatusCode.NoContent || content.StatusCode == HttpStatusCode.Gone)
                 return true;
             else
-                throw new Exception(response.ToString());
+            {
+                DialogResult dialogResult = MessageBox.Show("HTTP-ERROR " + content.StatusCode + ": " + response.ToString() + "Error deleating set. Try again?", "Exception while deleting sets", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    Thread.Sleep(1000);
+                    await delAsync(uri);
+                }
+            }
+            return false;
         }
 
 
         public async Task<Boolean> removeSet(int id)
         {
             String url = "https://api.quizlet.com/2.0/sets/" + id+ "?access_token="+this.access_token;
-            return await delAsync(url);
+            Console.WriteLine(url);
+            Thread.Sleep(1000);
+            bool returnValue = await delAsync(url);
+
+            if (!returnValue)
+                throw new Exception("Exception while removing existing sets");
+
+            return false;
         }
 
 
         public async Task<Boolean> createSets(String title, List<Kanji> kanjiList)
         {
-            String url = "https://api.quizlet.com/2.0/sets?access_token="+this.access_token;
-            var httpClient = new HttpClient();
-            List<KeyValuePair<string, string>> bodyProperties = new List<KeyValuePair<string, string>>();
-            bodyProperties.Add(new KeyValuePair<string, string>("title", title));
-            bodyProperties.Add(new KeyValuePair<string, string>("lang_terms", "ja-ro"));
-            bodyProperties.Add(new KeyValuePair<string, string>("lang_definitions", "en"));
-            bodyProperties.Add(new KeyValuePair<string, string>("visibility", "only_me"));
+            
 
-            foreach (Kanji kanji in kanjiList)
+            if(kanjiList.Count > 1)
             {
-                bodyProperties.Add(new KeyValuePair<string, string>("terms[]", kanji.frameNumber+" "+kanji.kanji));
-                bodyProperties.Add(new KeyValuePair<string, string>("definitions[]", kanji.keyword));
-            }
+                String url = "https://api.quizlet.com/2.0/sets?access_token=" + this.access_token;
+                var httpClient = new HttpClient();
+                List<KeyValuePair<string, string>> bodyProperties = new List<KeyValuePair<string, string>>();
+                bodyProperties.Add(new KeyValuePair<string, string>("title", title));
+                bodyProperties.Add(new KeyValuePair<string, string>("lang_terms", "en"));
+                bodyProperties.Add(new KeyValuePair<string, string>("lang_definitions", "ja"));
+                bodyProperties.Add(new KeyValuePair<string, string>("visibility", "only_me"));
 
-            var dataContent = new FormUrlEncodedContent(bodyProperties.ToArray());
+                foreach (Kanji kanji in kanjiList.Reverse<Kanji>())
+                {
+                    bodyProperties.Add(new KeyValuePair<string, string>("terms[]", kanji.keyword));
+                    
+                    if(kanji.story != "")
+                        bodyProperties.Add(new KeyValuePair<string, string>("definitions[]", kanji.frameNumber + " " + kanji.kanji + Environment.NewLine + kanji.story));
+                    else
+                        bodyProperties.Add(new KeyValuePair<string, string>("definitions[]", kanji.frameNumber + " " + kanji.kanji));
 
-            var content = await httpClient.PostAsync(url, dataContent);
-            var response = await content.Content.ReadAsStringAsync();
+                }
+                
 
-            if (content.StatusCode == HttpStatusCode.Created)
-            {
+                var dataContent = new FormUrlEncodedContent(bodyProperties.ToArray());
+                
+                var content = await httpClient.PostAsync(url, dataContent);
+                var response = await content.Content.ReadAsStringAsync();
+
+                if (content.StatusCode == HttpStatusCode.Created)
+                {
+                    return true;
+                }
+                else
+                {
+                    MessageBox.Show("HTTP-ERROR "+content.StatusCode+": "+response.ToString(), "Error creating sets", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 return true;
             }
-            else
-            {
-                throw new Exception(response.ToString());
-            }
+
+            throw new Exception("Exception while creating new sets");
         }
 
 
+        public async Task<Boolean> createAnkiSets(String title, List<AnkiCard> ankiList)
+        {
 
+
+            if (ankiList.Count > 1)
+            {
+                String url = "https://api.quizlet.com/2.0/sets?access_token=" + this.access_token;
+                var httpClient = new HttpClient();
+                List<KeyValuePair<string, string>> bodyProperties = new List<KeyValuePair<string, string>>();
+                bodyProperties.Add(new KeyValuePair<string, string>("title", title));
+                bodyProperties.Add(new KeyValuePair<string, string>("lang_terms", "en"));
+                bodyProperties.Add(new KeyValuePair<string, string>("lang_definitions", "ja"));
+                bodyProperties.Add(new KeyValuePair<string, string>("visibility", "only_me"));
+
+                foreach (AnkiCard anki in ankiList)
+                {
+                    bodyProperties.Add(new KeyValuePair<string, string>("terms[]", anki.kanji));
+
+                    if(anki.type != null)
+                        bodyProperties.Add(new KeyValuePair<string, string>("definitions[]", anki.keyword + " | " + anki.kana + "["+anki.type+"]" + " | " +anki.contextSentenceJp));
+                    else
+                        bodyProperties.Add(new KeyValuePair<string, string>("definitions[]", anki.keyword + " | " + anki.kana + " | " + anki.contextSentenceJp));
+
+                }
+
+
+                var dataContent = new FormUrlEncodedContent(bodyProperties.ToArray());
+
+                var content = await httpClient.PostAsync(url, dataContent);
+                var response = await content.Content.ReadAsStringAsync();
+
+                if (content.StatusCode == HttpStatusCode.Created)
+                {
+                    return true;
+                }
+                else
+                {
+                    MessageBox.Show("HTTP-ERROR " + content.StatusCode + ": " + response.ToString(), "Error creating anki sets", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                return true;
+            }
+
+            throw new Exception("Exception while creating new anki sets");
+        }
 
 
 
@@ -106,29 +207,16 @@ namespace KanjiKoohiApp
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        public bool getResponse(String listenUrl)
+        public bool getResponse(String url)
         {
-            string randomString = getRandomString();
-            string url = "https://quizlet.com/authorize?response_type=code&client_id="+ clientId + "&scope=read write_set&state=" + randomString;
+            string state = extractString(url, "state=", "&");
+            string code = extractString(url, "code=", "&");
 
-            System.Diagnostics.Process.Start(url);
-
-            HttpListener listener = new HttpListener();
-            listener.Prefixes.Add(listenUrl);
-            listener.Start();
-            HttpListenerContext context = listener.GetContext();
-            HttpListenerRequest request = context.Request;
-            listener.Stop();
-
-            string state = extractString(request.RawUrl, "state=", "&");
-            string code = extractString(request.RawUrl, "code=", "&");
-
-            if(code != null)
+            if (code != null)
             {
                 this.code = code;
-                return state.Equals(randomString);
+                return state.Equals(this.randomString);
             }
-
             return false;
         }
 

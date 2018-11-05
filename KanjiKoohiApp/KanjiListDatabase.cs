@@ -38,6 +38,56 @@ namespace KanjiKoohiApp
             this.kanjiList=kanjiList;
         }
 
+        public void parseStory(String filepath)
+        {
+            Dictionary<int, String> storyList = new Dictionary<int, string>();
+            using (var reader = new StreamReader(filepath, Encoding.UTF8))
+            {
+                int index = 0;
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    List<String> values = line.Split(',').ToList<String>();
+
+                    if (index == 0)
+                        index++;
+                    else
+                    {
+                        if(values.Count > 6)
+                        {
+                            String story = "";
+                            for(int i = values.Count; i > 5; i--)
+                            {
+                                if(i != values.Count)
+                                    story = values[i - 1] + ","+ story;
+                                else
+                                    story = values[i - 1] + story;
+                            }
+                            storyList.Add(Int32.Parse(values[0]), story.Replace("\"", ""));
+                        }
+                        else
+                        {
+                            storyList.Add(Int32.Parse(values[0]), values[5].Replace("\"", ""));
+                        }
+                    }
+                        
+                    
+                }
+
+                foreach (KeyValuePair<int, String> kv in storyList)
+                {
+                    foreach(Kanji kanji in this.kanjiList)
+                    {
+                        if(kanji.frameNumber == kv.Key)
+                        {
+                            kanji.story = kv.Value;
+                        }
+                    }
+                }
+
+            }
+        }
+
         public DataTable getDataTable(List<Kanji> kanjiList)
         {
             DataTable dataTable = new DataTable();
